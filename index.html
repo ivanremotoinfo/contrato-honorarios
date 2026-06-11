@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contrato de Honorários | SuporteADV</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #0d0d0d; color: #e0e0e0; padding: 24px 16px; }
+  .container { max-width: 760px; margin: 0 auto; }
+
+  .header { text-align: center; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid #222; }
+  h1 { font-size: 1.5rem; color: #008080; margin-bottom: 6px; }
+  .subtitle { font-size: 0.88rem; color: #888; line-height: 1.5; }
+  .brand { font-size: 0.78rem; margin-top: 8px; color: #555; }
+  .brand span.s { color: #8B00FF; font-weight: 700; }
+  .brand span.a { color: #008080; font-weight: 700; }
+
+  .card { background: #111; border-radius: 10px; border: 1px solid #222; border-left: 3px solid #8B00FF; padding: 20px 22px; margin-bottom: 14px; }
+  .card-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #008080; font-weight: 700; margin-bottom: 16px; }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  @media (max-width: 520px) { .form-grid { grid-template-columns: 1fr; } }
+  .field.full { grid-column: 1 / -1; }
+  .field label { display: block; font-size: 0.78rem; color: #888; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 9px 11px; border: 1.5px solid #333; border-radius: 6px;
+    font-size: 0.92rem; color: #fff; background: #1a1a1a; transition: border-color 0.2s; resize: vertical;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #008080; box-shadow: 0 0 0 2px rgba(0,128,128,0.2); }
+  .field select option { background: #1a1a1a; }
+
+  .info-box { background: #0d1a1a; border: 1px solid #1a3a3a; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; font-size: 0.82rem; color: #666; line-height: 1.6; }
+  .info-box b { color: #008080; }
+
+  button.gerar { background: #008080; color: #fff; border: none; padding: 10px 26px; border-radius: 6px; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.07em; cursor: pointer; transition: background 0.18s; text-transform: uppercase; margin-right: 10px; }
+  button.gerar:hover { background: #006666; box-shadow: 0 0 10px rgba(0,128,128,0.4); }
+  button.copiar { background: #1a1a1a; border: 1.5px solid #333; color: #888; padding: 10px 18px; border-radius: 6px; font-size: 0.82rem; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+  button.copiar:hover { border-color: #008080; color: #008080; }
+  button.imprimir { background: #8B00FF; color: #fff; border: none; padding: 10px 18px; border-radius: 6px; font-size: 0.82rem; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+  button.imprimir:hover { background: #7000cc; }
+
+  /* Contrato preview */
+  .contrato-wrap { margin-top: 14px; display: none; }
+  .contrato-wrap.visible { display: block; }
+  .contrato-titulo { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #008080; font-weight: 700; margin-bottom: 12px; }
+
+  .contrato-box {
+    background: #fff; color: #1a1a1a; border-radius: 8px; padding: 40px 44px;
+    font-family: 'Times New Roman', serif; font-size: 0.92rem; line-height: 1.8;
+    white-space: pre-wrap; word-wrap: break-word;
+  }
+  @media (max-width: 520px) { .contrato-box { padding: 20px 18px; font-size: 0.82rem; } }
+
+  .acoes { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+
+  .erro { background: #1a0a0a; border: 1px solid #4a1a1a; border-radius: 8px; padding: 14px 16px; color: #ff6666; font-size: 0.88rem; margin-top: 14px; display: none; }
+  .erro.visible { display: block; }
+
+  @media print {
+    body { background: #fff; color: #000; padding: 0; }
+    .card, .header, .acoes, .contrato-titulo, .erro { display: none !important; }
+    .contrato-wrap { display: block !important; }
+    .contrato-box { box-shadow: none; border: none; padding: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>Contrato de Honorários</h1>
+    <p class="subtitle">Gere um contrato de honorários advocatícios personalizado, pronto para imprimir e assinar.</p>
+    <p class="brand"><span class="s">suporte</span><span class="a">ADV</span>.br — Ferramentas para Advogados</p>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Dados do Advogado / Escritório</div>
+    <div class="form-grid">
+      <div class="field full"><label>Nome completo do advogado / escritório</label>
+        <input type="text" id="advNome" placeholder="Ex: João Silva Advogados Associados">
+      </div>
+      <div class="field"><label>OAB nº</label>
+        <input type="text" id="advOAB" placeholder="Ex: 12345/BA">
+      </div>
+      <div class="field"><label>CPF/CNPJ</label>
+        <input type="text" id="advCPF" placeholder="Ex: 000.000.000-00">
+      </div>
+      <div class="field full"><label>Endereço completo</label>
+        <input type="text" id="advEndereco" placeholder="Ex: Rua das Flores, 123, Salvador-BA">
+      </div>
+      <div class="field"><label>Telefone / WhatsApp</label>
+        <input type="text" id="advTel" placeholder="Ex: (71) 99999-9999">
+      </div>
+      <div class="field"><label>E-mail</label>
+        <input type="text" id="advEmail" placeholder="Ex: contato@escritorio.adv.br">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Dados do Cliente (Contratante)</div>
+    <div class="form-grid">
+      <div class="field full"><label>Nome completo do cliente</label>
+        <input type="text" id="cliNome" placeholder="Ex: Maria Oliveira Santos">
+      </div>
+      <div class="field"><label>CPF/CNPJ</label>
+        <input type="text" id="cliCPF" placeholder="Ex: 111.222.333-44">
+      </div>
+      <div class="field"><label>RG / Documento</label>
+        <input type="text" id="cliRG" placeholder="Ex: 1234567 SSP/BA">
+      </div>
+      <div class="field full"><label>Endereço completo</label>
+        <input type="text" id="cliEndereco" placeholder="Ex: Av. Principal, 456, Salvador-BA">
+      </div>
+      <div class="field"><label>Telefone</label>
+        <input type="text" id="cliTel" placeholder="Ex: (71) 88888-8888">
+      </div>
+      <div class="field"><label>E-mail</label>
+        <input type="text" id="cliEmail" placeholder="Ex: cliente@email.com">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Objeto e Honorários</div>
+    <div class="form-grid">
+      <div class="field full"><label>Objeto do contrato (descreva o serviço)</label>
+        <textarea id="objeto" rows="3" placeholder="Ex: Prestação de serviços advocatícios na área trabalhista, compreendendo propositura e acompanhamento de reclamação trabalhista em face de [nome da empresa]..."></textarea>
+      </div>
+      <div class="field"><label>Tipo de honorários</label>
+        <select id="tipoHon" onchange="atualizarCamposHon()">
+          <option value="exito">Êxito (% sobre o resultado)</option>
+          <option value="fixo">Fixo (valor determinado)</option>
+          <option value="misto">Misto (fixo + êxito)</option>
+          <option value="mensal">Mensal (retainer)</option>
+        </select>
+      </div>
+      <div class="field" id="wrap-pct"><label>Percentual de êxito (%)</label>
+        <input type="number" id="honPct" value="20" min="1" max="50" step="1">
+      </div>
+      <div class="field" id="wrap-fixo"><label>Valor fixo (R$)</label>
+        <input type="number" id="honFixo" placeholder="Ex: 3000" step="0.01" min="0">
+      </div>
+      <div class="field" id="wrap-mensal" style="display:none"><label>Valor mensal (R$)</label>
+        <input type="number" id="honMensal" placeholder="Ex: 1500" step="0.01" min="0">
+      </div>
+      <div class="field"><label>Adiantamento / Entrada (R$)</label>
+        <input type="number" id="honEntrada" value="0" step="0.01" min="0">
+      </div>
+      <div class="field"><label>Parcelamento do fixo</label>
+        <input type="text" id="honParcelamento" placeholder="Ex: 3 parcelas de R$ 1.000,00">
+      </div>
+    </div>
+
+    <div class="card-label" style="margin-top:4px">Cláusulas Adicionais</div>
+    <div class="form-grid">
+      <div class="field"><label>Foro de eleição</label>
+        <input type="text" id="foro" placeholder="Ex: Comarca de Salvador/BA">
+      </div>
+      <div class="field"><label>Data do contrato</label>
+        <input type="date" id="dataContrato">
+      </div>
+      <div class="field"><label>Local de assinatura</label>
+        <input type="text" id="local" placeholder="Ex: Salvador, Bahia">
+      </div>
+      <div class="field"><label>Número de testemunhas</label>
+        <select id="numTest">
+          <option value="0">Sem testemunhas</option>
+          <option value="1">1 testemunha</option>
+          <option value="2" selected>2 testemunhas</option>
+        </select>
+      </div>
+      <div class="field full"><label>Cláusulas especiais (opcional)</label>
+        <textarea id="clausulasEspeciais" rows="2" placeholder="Ex: O presente contrato abrange também eventuais recursos nas instâncias superiores..."></textarea>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="gerar" onclick="gerar()">GERAR CONTRATO</button>
+    </div>
+  </div>
+
+  <div class="erro" id="erro"></div>
+
+  <div class="contrato-wrap" id="contrato-wrap">
+    <div class="contrato-titulo">📄 Contrato Gerado — Pronto para imprimir</div>
+    <div class="contrato-box" id="contrato-box"></div>
+    <div class="acoes">
+      <button class="copiar" onclick="copiar()">📋 Copiar texto</button>
+      <button class="imprimir" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function atualizarCamposHon() {
+  const tipo = document.getElementById('tipoHon').value;
+  document.getElementById('wrap-pct').style.display = (tipo === 'exito' || tipo === 'misto') ? '' : 'none';
+  document.getElementById('wrap-fixo').style.display = (tipo === 'fixo' || tipo === 'misto') ? '' : 'none';
+  document.getElementById('wrap-mensal').style.display = tipo === 'mensal' ? '' : 'none';
+}
+
+function fmtMoeda(v) {
+  if (!v || isNaN(v)) return 'R$ 0,00';
+  return 'R$ ' + parseFloat(v).toLocaleString('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 });
+}
+function fmtData(d) {
+  if (!d) return '___/___/______';
+  const dt = new Date(d+'T12:00:00');
+  return dt.toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
+}
+function v(id) { return (document.getElementById(id)?.value || '').trim(); }
+
+function showErro(msg) {
+  document.getElementById('erro').textContent = msg;
+  document.getElementById('erro').classList.add('visible');
+}
+function hideErro() { document.getElementById('erro').classList.remove('visible'); }
+
+function gerar() {
+  hideErro();
+  const advNome = v('advNome'); const advOAB = v('advOAB'); const advCPF = v('advCPF');
+  const advEnd = v('advEndereco'); const advTel = v('advTel'); const advEmail = v('advEmail');
+  const cliNome = v('cliNome'); const cliCPF = v('cliCPF'); const cliRG = v('cliRG');
+  const cliEnd = v('cliEndereco'); const cliTel = v('cliTel');
+  const objeto = v('objeto');
+  const tipoHon = document.getElementById('tipoHon').value;
+  const honPct = v('honPct'); const honFixo = v('honFixo');
+  const honMensal = v('honMensal'); const honEntrada = v('honEntrada');
+  const honParc = v('honParcelamento');
+  const foro = v('foro') || 'Comarca do domicílio do Contratante';
+  const dataContrato = v('dataContrato');
+  const local = v('local') || '_______________';
+  const numTest = parseInt(v('numTest'));
+  const clausulasEsp = v('clausulasEspeciais');
+
+  if (!advNome) return showErro('Informe o nome do advogado/escritório.');
+  if (!cliNome) return showErro('Informe o nome do cliente.');
+  if (!objeto) return showErro('Descreva o objeto do contrato.');
+
+  // Cláusula de honorários
+  let clausulaHon = '';
+  const nomeTipos = { exito:'êxito', fixo:'fixo', misto:'misto (fixo + êxito)', mensal:'mensal (retainer)' };
+  if (tipoHon === 'exito') {
+    clausulaHon = `Os honorários advocatícios são fixados no percentual de ${honPct}% (${porExtenso(parseInt(honPct))} por cento) sobre o valor da condenação, acordo ou proveito econômico obtido, a serem pagos pelo CONTRATANTE ao CONTRATADO no prazo de 5 (cinco) dias úteis após o trânsito em julgado da decisão favorável ou homologação do acordo.`;
+  } else if (tipoHon === 'fixo') {
+    clausulaHon = `Os honorários advocatícios são fixados no valor de ${fmtMoeda(honFixo)}${honParc ? `, a ser pago da seguinte forma: ${honParc}` : ', a ser pago à vista no ato da assinatura deste contrato'}.${parseFloat(honEntrada) > 0 ? `\n\nO CONTRATANTE pagará, no ato da assinatura deste contrato, a título de adiantamento de custas e honorários, o valor de ${fmtMoeda(honEntrada)}.` : ''}`;
+  } else if (tipoHon === 'misto') {
+    clausulaHon = `Os honorários advocatícios são compostos de:\na) Parcela fixa: ${fmtMoeda(honFixo)}${honParc ? `, a ser pago: ${honParc}` : ', a ser pago à vista no ato da assinatura'};\nb) Parcela de êxito: ${honPct}% (${porExtenso(parseInt(honPct))} por cento) sobre o valor da condenação, acordo ou proveito econômico obtido.${parseFloat(honEntrada) > 0 ? `\n\nAdiantamento no ato da assinatura: ${fmtMoeda(honEntrada)}.` : ''}`;
+  } else {
+    clausulaHon = `Os honorários advocatícios mensais (retainer) são fixados em ${fmtMoeda(honMensal)} (${porExtensoReais(parseFloat(honMensal))}), a serem pagos até o dia 10 (dez) de cada mês, mediante depósito ou transferência bancária na conta informada pelo CONTRATADO.`;
+  }
+
+  const testemunhasBloco = numTest === 0 ? '' : numTest === 1
+    ? `\n\nTestemunha:\n\n_________________________________\nNome:\nCPF:`
+    : `\n\nTestemunhas:\n\n_________________________________          _________________________________\nNome:                                        Nome:\nCPF:                                         CPF:`;
+
+  const clausulaEspBloco = clausulasEsp
+    ? `\nCLÁUSULA DÉCIMA PRIMEIRA — DAS DISPOSIÇÕES ESPECIAIS\n\n${clausulasEsp}\n`
+    : '';
+
+  const contrato = `CONTRATO DE PRESTAÇÃO DE SERVIÇOS ADVOCATÍCIOS
+
+
+CONTRATADO:  ${advNome}
+             OAB nº ${advOAB || '___________'}
+             CPF/CNPJ: ${advCPF || '___________'}
+             Endereço: ${advEnd || '___________'}
+             Telefone: ${advTel || '___________'} | E-mail: ${advEmail || '___________'}
+
+CONTRATANTE: ${cliNome}
+             CPF/CNPJ: ${cliCPF || '___________'}
+             RG: ${cliRG || '___________'}
+             Endereço: ${cliEnd || '___________'}
+             Telefone: ${cliTel || '___________'}
+
+As partes acima identificadas celebram o presente CONTRATO DE PRESTAÇÃO DE SERVIÇOS ADVOCATÍCIOS, que se regerá pelas cláusulas seguintes e pelas disposições do Estatuto da OAB (Lei nº 8.906/94) e do Código Civil Brasileiro.
+
+
+CLÁUSULA PRIMEIRA — DO OBJETO
+
+${objeto}
+
+
+CLÁUSULA SEGUNDA — DOS HONORÁRIOS ADVOCATÍCIOS
+
+${clausulaHon}
+
+
+CLÁUSULA TERCEIRA — DAS DESPESAS PROCESSUAIS
+
+As despesas processuais (custas judiciais, diligências, emolumentos, publicações e demais encargos necessários ao andamento do processo) são de responsabilidade do CONTRATANTE e deverão ser pagas diretamente ou mediante adiantamento ao CONTRATADO, quando solicitado.
+
+
+CLÁUSULA QUARTA — DA AUTONOMIA TÉCNICA
+
+O CONTRATADO tem plena autonomia técnica para conduzir os serviços contratados, podendo adotar as estratégias processuais que julgar mais adequadas, sempre com o objetivo de defender os interesses do CONTRATANTE.
+
+
+CLÁUSULA QUINTA — DA OBRIGAÇÃO DE INFORMAR
+
+O CONTRATADO obriga-se a manter o CONTRATANTE informado sobre o andamento dos serviços, respondendo às comunicações em prazo razoável. O CONTRATANTE obriga-se a fornecer todos os documentos e informações necessárias à execução dos serviços.
+
+
+CLÁUSULA SEXTA — DA RENÚNCIA E REVOGAÇÃO DO MANDATO
+
+A renúncia ao mandato pelo CONTRATADO deverá ser comunicada com antecedência mínima de 10 (dez) dias, assegurado ao advogado o recebimento proporcional dos honorários pelo trabalho já realizado. A revogação pelo CONTRATANTE não prejudica o direito aos honorários pelos serviços prestados até a data da revogação.
+
+
+CLÁUSULA SÉTIMA — DA CONFIDENCIALIDADE
+
+O CONTRATADO fica obrigado a guardar sigilo sobre todas as informações que lhe forem confiadas pelo CONTRATANTE, nos termos do art. 7º, II, da Lei nº 8.906/94 e do Código de Ética e Disciplina da OAB.
+
+
+CLÁUSULA OITAVA — DOS HONORÁRIOS DE SUCUMBÊNCIA
+
+Os honorários de sucumbência eventualmente fixados pelo juízo pertencem ao advogado, nos termos do art. 85, §14º, do CPC/2015, não se confundindo com os honorários contratuais ora ajustados.
+
+
+CLÁUSULA NONA — DA MORA E JUROS
+
+O atraso no pagamento dos honorários contratuais sujeitará o CONTRATANTE ao pagamento de multa moratória de 2% (dois por cento) sobre o valor devido, acrescida de juros de 1% (um por cento) ao mês e correção monetária pelo IPCA, desde a data do vencimento até o efetivo pagamento.
+
+
+CLÁUSULA DÉCIMA — DO FORO
+
+Fica eleito o foro da ${foro} para dirimir quaisquer controvérsias decorrentes do presente contrato, com renúncia expressa a qualquer outro, por mais privilegiado que seja.
+${clausulaEspBloco}
+
+${local}, ${fmtData(dataContrato)}.
+
+
+
+
+_________________________________          _________________________________
+${advNome.toUpperCase()}                    ${cliNome.toUpperCase()}
+CONTRATADO                                  CONTRATANTE
+OAB nº ${advOAB || '___________'}
+${testemunhasBloco}`;
+
+  document.getElementById('contrato-box').textContent = contrato;
+  document.getElementById('contrato-wrap').classList.add('visible');
+  document.getElementById('contrato-wrap').scrollIntoView({ behavior: 'smooth' });
+}
+
+function porExtenso(n) {
+  const unidades = ['','um','dois','três','quatro','cinco','seis','sete','oito','nove','dez',
+    'onze','doze','treze','quatorze','quinze','dezesseis','dezessete','dezoito','dezenove'];
+  const dezenas = ['','','vinte','trinta','quarenta','cinquenta'];
+  if (n < 20) return unidades[n];
+  const d = Math.floor(n/10), u = n%10;
+  return dezenas[d] + (u ? ' e ' + unidades[u] : '');
+}
+
+function porExtensoReais(v) {
+  if (!v || isNaN(v)) return 'zero reais';
+  const inteiro = Math.floor(v);
+  const cents = Math.round((v - inteiro) * 100);
+  const milhar = Math.floor(inteiro/1000);
+  const centena = inteiro % 1000;
+  let txt = '';
+  if (milhar > 0) txt += porExtenso(milhar) + ' mil';
+  if (centena > 0) txt += (milhar ? ' e ' : '') + porExtenso(centena);
+  txt += inteiro === 1 ? ' real' : ' reais';
+  if (cents > 0) txt += ' e ' + porExtenso(cents) + (cents === 1 ? ' centavo' : ' centavos');
+  return txt;
+}
+
+function copiar() {
+  const txt = document.getElementById('contrato-box').textContent;
+  navigator.clipboard.writeText(txt).then(() => {
+    const btn = document.querySelector('button.copiar');
+    btn.textContent = '✅ Copiado!';
+    setTimeout(() => btn.textContent = '📋 Copiar texto', 2000);
+  });
+}
+
+// Init
+atualizarCamposHon();
+document.getElementById('dataContrato').value = new Date().toISOString().split('T')[0];
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+    const f = document.activeElement;
+    if (f && f.tagName === 'INPUT') gerar();
+  }
+});
+</script>
+</body>
+</html>
